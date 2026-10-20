@@ -1,0 +1,51 @@
+import React, { useState } from 'react';
+import { userService } from '../../_services/user.service';
+
+const Login = () => {
+    const [ credentials, setCredentials ] = useState({
+        email : "",
+        password: ""
+    })
+    const [ err, setErr ] = useState(null)
+
+    const onChange = (e) => {
+        setCredentials({
+            ...credentials,
+            [ e.target.name ] : e.target.value
+        })
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        userService.login(credentials)
+            .then(res => {
+                userService.saveToken(res.data.token)
+                window.location.href = "/"
+            })
+            .catch(error => {
+                setErr(error)
+            })
+    }
+
+    return (
+        <div>
+            <h1>Connexion</h1>
+            <form onSubmit={onSubmit}>
+                <div>
+                    <label htmlFor="email">Email</label>
+                    <input type="email" name="email" value={credentials.email} id="email" onChange={onChange}/>
+                </div>
+                <div>
+                    <label htmlFor="password">Mot de passe</label>
+                    <input type="password" name="password" value={credentials.password} id="password" onChange={onChange}/>
+                </div>
+                <button type="submit">Valider</button>
+            </form>
+            {err && (
+                <p>{ err?.response?.details || "Erreur" }</p>
+            )}
+        </div>
+    );
+};
+
+export default Login;

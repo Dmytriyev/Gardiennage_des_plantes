@@ -1,0 +1,9 @@
+.users {
+    border: 2px solid black;
+    padding: 1rem;
+}
+
+.users_card {
+    border: solid 1px black;
+    padding: 1rem;
+}
