@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { commentService } from '../../_services/commentary.service';
 
@@ -28,7 +29,7 @@ const UpdateComment = () => {
                 setErr(error)
                 setLoaded(true)
             })
-    }, [])
+    }, [id])
 
     const onChange = (e) => {
         setCredentials({
@@ -41,7 +42,7 @@ const UpdateComment = () => {
         e.preventDefault()
         commentService.updateComment(id, credentials)
             .then(() => {
-                navigate("/articles/list")
+                navigate(`/articles/one/${comment.article}`)
             })
             .catch(error => {
                 setErr(error)
@@ -52,10 +53,10 @@ const UpdateComment = () => {
         try {
             setDeleting(true)
             await commentService.deleteComment(comment._id)
-            navigate("/articles/list")
+            navigate(`/articles/one/${comment.article}`)
         } catch (error) {
             setDeleting(false)
-            alert(error)
+            alert(errorMessage(error))
         }
     }
 
@@ -78,9 +79,9 @@ const UpdateComment = () => {
                 <button type="submit">Valider</button>
             </form>
             {err && (
-                <p>Erreur</p>
+                <p>{errorMessage(err)}</p>
             )}
-            <button onClick={ () => { if (window.confirm("Êtes vous sur de vouloir supprimer cet article ?")) { handleDelete() } } } disabled={deleting}>Supprimer</button>
+            <button onClick={ () => { if (window.confirm("Êtes-vous sûr de vouloir supprimer ce commentaire\u00a0?")) { handleDelete() } } } disabled={deleting}>Supprimer</button>
         </div>
     );
 };

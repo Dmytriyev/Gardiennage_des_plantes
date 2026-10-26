@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { categoryService } from "../../_services/category.service"
 
 const CategoriesList = () => {
@@ -29,7 +30,7 @@ const CategoriesList = () => {
     else if ( err ) {
         return (
             <div>
-                <h2>Erreur : {err}</h2>
+                <h2>Erreur&nbsp;: {errorMessage(err)}</h2>
             </div>
         )
     }
@@ -41,7 +42,7 @@ const CategoriesList = () => {
                     <p>Pas de catégories</p>
                 )}
                 { categories.map(category => (
-                    <div>
+                    <div key={category._id}>
                         <h2>{category.name}</h2>
                     </div>
                 )) }

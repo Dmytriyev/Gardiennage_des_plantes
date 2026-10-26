@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { userService } from '../../_services/user.service';
 import "./users.css"
 
@@ -30,7 +31,7 @@ const ListUsers = () => {
     else if ( err ) {
         return (
             <div>
-                <h2>Erreur : {err}</h2>
+                <h2>Erreur&nbsp;: {errorMessage(err)}</h2>
             </div>
         )
     }
@@ -40,7 +41,7 @@ const ListUsers = () => {
                 <h1>Liste des utilisateurs</h1>
                 <div className='users_card'>
                     { users.map(user => (
-                        <div>
+                        <div key={user._id}>
                             <h2>{user.username}</h2>
                             <a href={`/users/one/${user._id}`}>Voir le profil</a>
                         </div>

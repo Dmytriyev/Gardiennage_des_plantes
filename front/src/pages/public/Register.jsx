@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { useNavigate } from 'react-router-dom';
 import { userService } from '../../_services/user.service';
 
@@ -24,7 +25,7 @@ const Register = () => {
         e.preventDefault()
         userService.register(credentials)
             .then(() => {
-                navigate("/")
+                navigate("/login")
             })
             .catch(error => {
                 setErr(error)
@@ -36,21 +37,21 @@ const Register = () => {
             <h1>Inscription</h1>
             <form onSubmit={onSubmit}>
                 <div>
-                    <label htmlFor="username">Nom d'utilisateur</label>
-                    <input type="text" name="username" value={credentials.username} id="username" onChange={onChange}/>
+                    <label htmlFor="username">Pseudo (3 à 10 caractères)</label>
+                    <input type="text" name="username" value={credentials.username} id="username" onChange={onChange} minLength={3} maxLength={10} autoComplete="username" required/>
                 </div>
                 <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" name="email" value={credentials.email} id="email" onChange={onChange}/>
+                    <label htmlFor="email">Adresse e-mail</label>
+                    <input type="email" name="email" value={credentials.email} id="email" onChange={onChange} autoComplete="email" required/>
                 </div>
                 <div>
-                    <label htmlFor="password">Mot de passe</label>
-                    <input type="password" name="password" value={credentials.password} id="password" onChange={onChange}/>
+                    <label htmlFor="password">Mot de passe (15 à 30 caractères)</label>
+                    <input type="password" name="password" value={credentials.password} id="password" onChange={onChange} minLength={15} maxLength={30} autoComplete="new-password" required/>
                 </div>
                 <button type="submit">Valider</button>
             </form>
             {err && (
-                <p>{ err?.response?.details || "Erreur" }</p>
+                <p>{ errorMessage(err) }</p>
             )}
         </div>
     );

@@ -1,15 +1,21 @@
 import Commentary from "../models/commentary.model.js"
+import Article from "../models/article.model.js"
 import commentaryValidation from "../validations/commentary.validation.js"
+import isAuthorOrAdmin from "../utils/isAuthorOrAdmin.js"
+import handleError from "../utils/handleError.js"
 
 const createCommentary = async(req,res)=>{
     try {
         const {body} = req
         if(!body){
-            return res.status(400).json({message: "no data in the request"})
+            return res.status(400).json({message: "Pas de données dans la requête"})
         }
         const {error} = commentaryValidation(body).commentaryCreate
         if(error){
-            return res.status(401).json(error.details[0].message)
+            return res.status(400).json({message: error.details[0].message})
+        }
+        if(!await Article.exists({_id: req.params.article_id})){
+            return res.status(404).json({message: "Annonce introuvable"})
         }
 
         body.author = req.user.id
@@ -17,20 +23,18 @@ const createCommentary = async(req,res)=>{
 
         const commentary = new Commentary(body)
         const newCommentary = await commentary.save()
-        return res.status(201).json(newCommentary)        
+        return res.status(201).json(newCommentary)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server error", error: error})
+        handleError(res, error)
     }
 }
 
-const getAllCommentarys = async(req, res) => {
+const getAllCommentaries = async(req, res) => {
     try {
-        const commentarys = await Commentary.find()
-        return res.status(200).json(commentarys)
+        const commentaries = await Commentary.find()
+        return res.status(200).json(commentaries)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server Error", error: error})
+        handleError(res, error)
     }
 }
 
@@ -38,12 +42,11 @@ const getCommentaryById = async(req,res) => {
     try {
         const commentary = await Commentary.findById(req.params.id)
         if(!commentary){
-            return res.status(404).json({message: "commentary doesn't exist"})
+            return res.status(404).json({message: "Commentaire introuvable"})
         }
         return res.status(200).json(commentary)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server error", error: error})
+        handleError(res, error)
     }
 }
 
@@ -51,35 +54,42 @@ const updateCommentary = async(req,res) => {
     try {
         const {body} = req
         if(!body){
-            return res.status(400).json({message: "No data in the request"})
+            return res.status(400).json({message: "Pas de données dans la requête"})
         }
 
         const {error} = commentaryValidation(body).commentaryUpdate
         if(error){
-            return res.status(401).json(error.details[0].message)
+            return res.status(400).json({message: error.details[0].message})
         }
-        const updatedCommentary = await Commentary.findByIdAndUpdate(req.params.id, body, {new: true})
-        if(!updatedCommentary){
-            res.status(404).json({message: "commentary doesn't exist"})
+        const commentary = await Commentary.findById(req.params.id)
+        if(!commentary){
+            return res.status(404).json({message: "Commentaire introuvable"})
         }
+        if(!isAuthorOrAdmin(req.user, commentary.author)){
+            return res.status(403).json({message: "Vous ne pouvez modifier que vos propres commentaires"})
+        }
+        commentary.set(body)
+        const updatedCommentary = await commentary.save()
         return res.status(200).json(updatedCommentary)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server error", error: error})
+        handleError(res, error)
     }
 }
 
 const deleteCommentary = async(req, res) => {
     try {
-        const commentary = await Commentary.findByIdAndDelete(req.params.id)
+        const commentary = await Commentary.findById(req.params.id)
         if(!commentary){
-            return res.status(404).json({message: "commentary doesn't exist"})
+            return res.status(404).json({message: "Commentaire introuvable"})
         }
-        return res.status(200).json({message: "commentary has been deleted"})
+        if(!isAuthorOrAdmin(req.user, commentary.author)){
+            return res.status(403).json({message: "Vous ne pouvez supprimer que vos propres commentaires"})
+        }
+        await commentary.deleteOne()
+        return res.status(200).json({message: "Le commentaire a bien été supprimé"})
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server error", error: error})
+        handleError(res, error)
     }
 }
 
-export { createCommentary, getAllCommentarys, getCommentaryById, updateCommentary, deleteCommentary }
+export { createCommentary, getAllCommentaries, getCommentaryById, updateCommentary, deleteCommentary }

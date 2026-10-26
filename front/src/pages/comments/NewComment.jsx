@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { commentService } from '../../_services/commentary.service';
 
@@ -23,7 +24,7 @@ const NewComment = () => {
         e.preventDefault()
         commentService.createComment(credentials, article_id)
             .then(() => {
-                navigate("/articles/list")
+                navigate(`/articles/one/${article_id}`)
             })
             .catch(error => {
                 setErr(error)
@@ -41,7 +42,7 @@ const NewComment = () => {
                 <button type="submit">Valider</button>
             </form>
             {err && (
-                <p>Erreur</p>
+                <p>{errorMessage(err)}</p>
             )}
         </div>
     );

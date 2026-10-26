@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './pages/public/Home'
 import PublicRouter from './pages/public/PublicRouter'
 import UsersRouter from './pages/users/UsersRouter'
 import CategoriesRouter from './pages/categories/CategoriesRouter'

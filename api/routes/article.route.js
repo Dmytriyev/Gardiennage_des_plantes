@@ -8,7 +8,7 @@ const router = Router()
 router.post('/new', auth, createArticle)
 router.get('/all', getAllArticles)
 router.get('/:id', getArticleById)
-router.put('/:id', updateArticle)
-router.delete('/:id', deleteArticle)
+router.put('/:id', auth, updateArticle)
+router.delete('/:id', auth, deleteArticle)
 
 export default router

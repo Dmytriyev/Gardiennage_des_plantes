@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { userService } from '../../_services/user.service';
 
 const Login = () => {
@@ -32,17 +33,17 @@ const Login = () => {
             <h1>Connexion</h1>
             <form onSubmit={onSubmit}>
                 <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" name="email" value={credentials.email} id="email" onChange={onChange}/>
+                    <label htmlFor="email">Adresse e-mail</label>
+                    <input type="email" name="email" value={credentials.email} id="email" onChange={onChange} autoComplete="email" required/>
                 </div>
                 <div>
                     <label htmlFor="password">Mot de passe</label>
-                    <input type="password" name="password" value={credentials.password} id="password" onChange={onChange}/>
+                    <input type="password" name="password" value={credentials.password} id="password" onChange={onChange} autoComplete="current-password" required/>
                 </div>
                 <button type="submit">Valider</button>
             </form>
             {err && (
-                <p>{ err?.response?.details || "Erreur" }</p>
+                <p>{ errorMessage(err) }</p>
             )}
         </div>
     );

@@ -1,0 +1,39 @@
+{
+  "version": "0.2",
+  "language": "fr,en",
+  "import": [
+    "@cspell/dict-fr-fr/cspell-ext.json"
+  ],
+  "files": [
+    "README.md",
+    "Document/**/*.md",
+    "api/**/*.js",
+    "front/index.html",
+    "front/src/**/*.{js,jsx,css}",
+    "front/tests/**/*.{js,jsx}",
+    "tests/**/*.js"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/package-lock.json"
+  ],
+  "words": [
+    "alice",
+    "camille",
+    "d'alice",
+    "Dmytriyev",
+    "flowbite",
+    "IDOR",
+    "mrmongoo",
+    "nosniff",
+    "Nunito",
+    "qualite",
+    "reservee",
+    "RGPD",
+    "securite",
+    "tailwindcss",
+    "terminee",
+    "virtuals"
+  ]
+}

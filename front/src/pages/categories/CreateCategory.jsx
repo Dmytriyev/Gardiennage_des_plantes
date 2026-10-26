@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { categoryService } from '../../_services/category.service';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,7 +41,7 @@ const CreateCategory = () => {
                 <button type="submit">Valider</button>
             </form>
             {err && (
-                <p>{ err?.response?.details || "Erreur" }</p>
+                <p>{ errorMessage(err) }</p>
             )}
         </div>
     );

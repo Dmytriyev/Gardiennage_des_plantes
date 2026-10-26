@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { userService } from '../../_services/user.service';
 
@@ -21,9 +22,9 @@ const OneUser = () => {
             })
             .catch(error => {
                 setErr(error)
-                loaded(true)
+                setLoaded(true)
             })
-    })
+    }, [id])
 
     const handleDelete = async () => {
         try {
@@ -32,7 +33,7 @@ const OneUser = () => {
             navigate("/users/list")
         } catch (error) {
             setDeleting(false)
-            alert(error)
+            alert(errorMessage(error))
         }
     }
 
@@ -46,7 +47,7 @@ const OneUser = () => {
     else if ( err ) {
         return (
             <div>
-                <h2>Erreur : {err}</h2>
+                <h2>Erreur&nbsp;: {errorMessage(err)}</h2>
             </div>
         )
     }
@@ -55,7 +56,7 @@ const OneUser = () => {
             <div>
                 <h2>{user.username}</h2>
                 <p>{user.email}</p>
-                <button onClick={() => { if ( window.confirm("Êtes vous sur de vouloir supprimer cet utilisateur ?") ) { handleDelete() } }}disabled={deleting}>Supprimer</button>
+                <button onClick={() => { if ( window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur\u00a0?") ) { handleDelete() } }} disabled={deleting}>Supprimer</button>
             </div>
         );
     }

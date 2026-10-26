@@ -1,32 +1,16 @@
-import express from "express"
+import app from "./app.js"
 import db from './db/db.js'
-import userRoutes from "./routes/user.routes.js"
-import articleRoutes from './routes/article.route.js';
-import commentaryRoutes from './routes/commentary.route.js';
-import categoryRoutes from './routes/category.route.js';
-import cors from "cors"
 
-// Utilisation du framework express
-const app = express()
-
-// L'API traitera des données au format JSON
-app.use(express.json())
+// Sans clé secrète, aucun jeton ne peut être signé : on refuse de démarrer
+if ( !process.env.SECRET_KEY ) {
+    console.error("SECRET_KEY manquante dans le fichier .env")
+    process.exit(1)
+}
 
 db()
 
-app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: "Origin, X-Requested-With, x-access-token, role, Content, Accept, Content-Type, Authorization"
-}))
-
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 
 app.listen(port, () => {
     console.log(`Le serveur écoute sur le port ${port}`)
 })
-
-app.use("/users", userRoutes)
-app.use('/category', categoryRoutes);
-app.use('/commentary', commentaryRoutes);
-app.use('/article', articleRoutes);

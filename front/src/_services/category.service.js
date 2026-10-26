@@ -13,7 +13,7 @@ let getOneCategory = (id) => {
 }
 
 let updateCategory = (id, credentials) => {
-    return Axios.put(`/category/${id}`)
+    return Axios.put(`/category/${id}`, credentials)
 }
 
 let deleteCategory = (id) => {

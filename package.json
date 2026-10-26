@@ -1,0 +1,18 @@
+{
+  "name": "gardiennage-des-plantes",
+  "private": true,
+  "description": "Plateforme gratuite d'annonces entre voisins pour donner, faire garder ou garder des plantes",
+  "type": "module",
+  "scripts": {
+    "test": "bash tests.sh",
+    "test:unitaires": "bash tests.sh unitaires",
+    "test:integration": "bash tests.sh integration",
+    "test:securite": "bash tests.sh securite",
+    "test:orthographe": "bash tests.sh orthographe",
+    "test:qualite": "bash tests.sh qualite"
+  },
+  "devDependencies": {
+    "@cspell/dict-fr-fr": "^2.3.2",
+    "cspell": "^10.4.0"
+  }
+}

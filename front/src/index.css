@@ -3,4 +3,51 @@
 @import "flowbite/src/themes/default";
 
 @plugin "flowbite/plugin";
-@source "../node_modules/flowbite"
+@source "../node_modules/flowbite";
+
+/* Charte graphique : toutes les couleurs et polices du site sont définies ici */
+@theme {
+    --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+    --font-hand: "Caveat", cursive;
+
+    --color-foret: #1e4d33;
+    --color-feuille: #2f7d4a;
+    --color-pousse: #7cc26a;
+    --color-menthe: #eaf4e4;
+    --color-creme: #fffbf3;
+    --color-soleil: #f7b928;
+    --color-soleil-clair: #fff1c9;
+    --color-agrume: #b54e0c;
+    --color-agrume-clair: #fdebdb;
+    --color-ciel: #dcf0fb;
+    --color-ciel-fonce: #1b6a9e;
+    --color-encre: #1c2a21;
+    --color-mousse: #55665a;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-creme);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Boutons réutilisables : <Link className="btn btn-primary"> */
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-soleil;
+    }
+    .btn-primary {
+        @apply bg-foret text-white shadow-sm hover:bg-feuille;
+    }
+    .btn-outline {
+        @apply border-2 border-foret text-foret hover:bg-foret hover:text-white;
+    }
+    .btn-lg {
+        @apply px-7 py-3.5 text-lg;
+    }
+}

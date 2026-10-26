@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { errorMessage } from '../../_helpers/errorMessage';
 import { useEffect } from 'react';
 import { categoryService } from '../../_services/category.service';
 import { articleService } from '../../_services/article.service';
@@ -37,7 +38,7 @@ const UpdateArticle = () => {
             setCatErr(error)
             setLoaded(true)
         })
-    }, [])
+    }, [id])
 
     const onChange = (e) => {
         setCredentials({
@@ -84,18 +85,18 @@ const UpdateArticle = () => {
     else if (catErr) {
         return (
             <div>
-                <h2>Erreur : {catErr}</h2>
+                <h2>Erreur&nbsp;: {errorMessage(catErr)}</h2>
             </div>
         )
     }
     else {
         return (
             <div>
-                <h1>Mise à jour de l'article</h1>
+                <h1>Modifier l'annonce</h1>
                 <form onSubmit={onSubmit}>
-                    <p>Catégories :</p>
+                    <p>Catégories&nbsp;:</p>
                     {categories.map(category => (
-                        <div>
+                        <div key={category._id}>
                             <label htmlFor={category.name}>{category.name}</label>
                             <input type="checkbox" name={category.name} id={category.name} value={category._id} checked={credentials.categories.includes(category._id)} onChange={onCategoryChange}/>
                         </div>
@@ -105,13 +106,13 @@ const UpdateArticle = () => {
                         <input type="text" name="title" id="title" value={credentials.title} onChange={onChange}/>
                     </div>
                     <div>
-                        <label htmlFor="content">Contenu</label>
+                        <label htmlFor="content">Description</label>
                         <textarea name="content" id="content" defaultValue={credentials.content} onChange={onChange}></textarea>
                     </div>
                     <button type="submit">Valider</button>
                 </form>
                 { err && (
-                    <p>Erreur</p>
+                    <p>{errorMessage(err)}</p>
                 ) }
 
             </div>

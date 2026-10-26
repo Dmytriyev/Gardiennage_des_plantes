@@ -37,9 +37,10 @@ let logout = () => {
     localStorage.removeItem("token")
 }
 
+// Connecté = jeton présent, lisible et non expiré
 let isLogged = () => {
-    let token = localStorage.getItem("token")
-    return !!token
+    const user = getUserFromToken()
+    return !!user && ( !user.exp || user.exp * 1000 > Date.now() )
 }
 
 let getUserFromToken = () => {
@@ -51,16 +52,24 @@ let getUserFromToken = () => {
     try {
         return jwtDecode(token)
     } catch (error) {
-        console.log("Token invalide", error)
+        console.log("Jeton invalide", error)
         return null
     }
 }
 
 let isAdmin = () => {
+    return isLogged() && getUserFromToken().isAdmin === true
+}
+
+// Pour n'afficher « Modifier » et « Supprimer » qu'à l'auteur ou à un admin
+let isAuthorOrAdmin = (authorId) => {
+    if ( !isLogged() ) {
+        return false
+    }
     const user = getUserFromToken()
-    return user?.isAdmin === true
+    return user.isAdmin === true || user.id === authorId
 }
 
 export const userService = {
-    login, register, getAllUsers, getOneUser, updateOne, deleteUser, saveToken, getToken, logout, isLogged, isAdmin
+    login, register, getAllUsers, getOneUser, updateOne, deleteUser, saveToken, getToken, logout, isLogged, isAdmin, getUserFromToken, isAuthorOrAdmin
 }

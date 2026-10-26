@@ -1,4 +1,3 @@
-import React from 'react';
 import { userService } from '../_services/user.service';
 import { Navigate } from 'react-router-dom';
 
